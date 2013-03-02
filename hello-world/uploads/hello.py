@@ -1,17 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-
 from flask import Flask
 from flask import url_for
 from flask import request
 from flask import render_template
-from flask import make_response
-from flask import abort
-from flask import redirect
-from flask import session
-from flask import escape
 from werkzeug import secure_filename
 
 app = Flask(__name__)
@@ -100,59 +93,7 @@ def upload_file():
         </form>
         '''
 
-
-@app.route('/cookies')
-def hello_cookies():
-    username = request.args.get('username')
-
-    if username is None:
-        username = request.cookies.get('username')
-        response = make_response(render_template('hello.html', name=username))
-    else:
-        response = make_response(render_template('hello.html', name=username))
-        response.set_cookie('username', username)
-
-    return response
-
-
-@app.route('/redirect/<url>')
-def hello_redirect(url):
-    try:
-        to_url = url_for(url)
-    except:
-        abort(404)
-    else:
-        return redirect(to_url)
-
-
-@app.route('/hello/index')
-def hello_index():
-    if 'username' in session:
-        return 'Logged in as %s' % escape(session['username'])
-    return redirect(url_for('hello_login'))
-
-
-@app.route('/hello/login', methods=['GET', 'POST'])
-def hello_login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for('hello_index'))
-    return '''
-        <form action="" method="post">
-            <p><input type="text" name="username"></p>
-            <p><input type="submit" value="Login"></p>
-        </form>
-        '''
-
-
-@app.route('/hello/logout')
-def hello_logout():
-    session.pop('username', None)
-    app.logger.debug('Logout')  # logging
-    return redirect(url_for('hello_login'))
-
 # url_for('static', filename='style.css')  static/style.css
-app.secret_key = os.urandom(24)
 
 if __name__ == '__main__':
     app.debug = True
