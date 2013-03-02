@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-
 from flask import Flask
 from flask import url_for
 from flask import request
@@ -152,7 +150,8 @@ def hello_logout():
     return redirect(url_for('hello_login'))
 
 # url_for('static', filename='style.css')  static/style.css
-app.secret_key = os.urandom(24)
+# os.urandom(20)
+app.secret_key = '\xb5`\xeb+\xff\xc4\xae\xef+\x9c\x0bf?\xb0\xcdR\xfb%\x98\x05'
 
 if __name__ == '__main__':
     app.debug = True
