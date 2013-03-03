@@ -2,3 +2,4 @@
 distribute-*.tar.gz
 .env
 *.py[co]
+*.db
