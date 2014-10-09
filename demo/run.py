@@ -1,5 +1,6 @@
 from flask import Flask
 
+from apps.account.views import account
 from database import dbs
 
 
@@ -17,6 +18,8 @@ def create_app(config=None):
         db.init_app(app)
         db.app = app
 
+    app.register_blueprint(account)
+
     return app
 
 
@@ -27,4 +30,4 @@ def create_db():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

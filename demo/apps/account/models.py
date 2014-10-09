@@ -28,6 +28,20 @@ class User(db.Model):
     def is_authenticated(self):
         return True
 
+    @classmethod
+    def create_user(cls, username, password):
+        user = cls(username.lower(), password.lower())
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    @classmethod
+    def login(cls, username, password):
+        user = cls.query.filter_by(username=username, password=password
+                                   ).first()
+        if user:
+            return user
+
     def __str__(self):
         return self.username
 

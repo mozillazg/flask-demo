@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{% block title %}Flask Demo{% endblock %}</title>
+    <style type="text/css" media="all">
+      body {
+        margin: 10px auto;
+        width: 960px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="messages">
+    {% block messages %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      {% endwith %}
+    {% endblock %}
+    </div>
+
+    <div class="content">
+    {% block content %}
+    {% endblock %}
+    </div>
+  </body>
+</html>
