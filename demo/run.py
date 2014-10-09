@@ -1,7 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# import sys
+
+# sys.path.insert(0, '../')
+
 from flask import Flask
 
 from apps.account.views import account
-from database import dbs
+from database import db
 
 
 def create_app(config=None):
@@ -14,9 +20,8 @@ def create_app(config=None):
         app.config.update(config)
     app.static_folder = app.config.get('STATIC_FOLDER')
 
-    for db in dbs:
-        db.init_app(app)
-        db.app = app
+    db.init_app(app)
+    db.app = app
 
     app.register_blueprint(account)
 
@@ -24,8 +29,9 @@ def create_app(config=None):
 
 
 def create_db():
-    for db in dbs:
-        db.create_all()
+    from apps.account.models import User
+    from apps.blog.models import Post, Comment
+    db.create_all()
 
 app = create_app()
 

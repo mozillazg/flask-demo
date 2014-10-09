@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from flask.ext.sqlalchemy import SQLAlchemy
 
-from apps.account.models import db as db1
-
-dbs = [db1, ]
+db = SQLAlchemy()
