@@ -7,7 +7,11 @@
   <p>title: <input type="text" name="title" id="title" value="{{ data.title }}" /></p>
   <p>slug: <input type="text" name="slug" id="slug" value="{{ data.slug }}" /></p>
   <p>content: <textarea name="content" id=content rows="8" cols="40">{{ data.content }}</textarea></p>
+  {% if data %}
+  <p><input type="submit" value="update post"> </p>
+  {% else %}
   <p><input type="submit" value="new post"> </p>
+  {% endif %}
 </form>
 
 {% endblock %}

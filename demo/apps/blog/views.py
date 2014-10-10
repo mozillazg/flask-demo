@@ -22,8 +22,9 @@ def before_request():
 @blog.route('/')
 @login_required
 def index():
-    data = Post.query.all()
-    return render_template('index.html', data=data)
+    # data = Post.query.order_by(db.desc(Post.updated_at)).all()
+    data = Post.query.order_by(db.desc(Post.created_at)).all()
+    return render_template('blog/index.html', data=data)
 
 
 @blog.route('/new/', methods=['GET', 'POST'])
@@ -39,7 +40,7 @@ def new():
 
         flash('add success')
         return redirect(url_for('.index'))
-    return render_template('add.html', data=None)
+    return render_template('blog/add.html', data=None)
 
 
 @blog.route('/delete/', methods=['POST'])
@@ -71,14 +72,14 @@ def edit(post_id, slug):
 
         flash('edit success')
         return redirect(url_for('.index'))
-    return render_template('add.html', data=post)
+    return render_template('blog/add.html', data=post)
 
 
 @blog.route('/view/<int:post_id>/<slug>/')
 def view(post_id, slug):
     post = Post.query.get_or_404(post_id)
     comments = post.comments
-    return render_template('view.html', post=post, comments=comments)
+    return render_template('blog/view.html', post=post, comments=comments)
 
 
 @blog.route('/new_comment/<int:post_id>/', methods=['POST'])

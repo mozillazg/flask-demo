@@ -36,7 +36,7 @@ def register():
             return redirect(url_for('.login'))
     if message:
         flash(message)
-    return render_template('register.html')
+    return render_template('account/register.html')
 
 
 @account.route('/login/', methods=['GET', 'POST'])
@@ -60,14 +60,14 @@ def login():
             return redirect(next_url)
     if message:
         flash(message)
-    return render_template('login.html')
+    return render_template('account/login.html')
 
 
 @account.route('/')
 @login_required
 def index():
     user_id = session.get('user_id')
-    return render_template('index.html',
+    return render_template('account/index.html',
                            user=User.query.filter_by(id=user_id))
 
 
