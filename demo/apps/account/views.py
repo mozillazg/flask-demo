@@ -1,13 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import (Blueprint, flash, render_template, abort, redirect,
-                   request, url_for, session)
+from flask import (Blueprint, flash, render_template, redirect,
+                   request, url_for, session, g)
 from .models import User
+from .decorators import login_required
 
 account = Blueprint('account', __name__,
                     url_prefix='/accounts',
                     template_folder='templates')
+
+
+@account.before_request
+def before_request():
+    g.user = None
+    if 'user_id' in session:
+        g.user = User.query.get(session['user_id'])
 
 
 @account.route('/register/', methods=['GET', 'POST'])
@@ -26,8 +34,8 @@ def register():
             message = 'register success'
             flash(message)
             return redirect(url_for('.login'))
-
-    flash(message)
+    if message:
+        flash(message)
     return render_template('register.html')
 
 
@@ -48,16 +56,23 @@ def login():
             else:
                 message = 'username or password error'
             flash(message)
-            return redirect(url_for('.index'))
-
-    flash(message)
+            next_url = request.args.get('next', url_for('.index'))
+            return redirect(next_url)
+    if message:
+        flash(message)
     return render_template('login.html')
 
 
 @account.route('/')
+@login_required
 def index():
     user_id = session.get('user_id')
-    if not user_id:
-        abort(403)
-    else:
-        return 'login as %s' % User.query.filter_by(id=user_id).first().username
+    return render_template('index.html',
+                           user=User.query.filter_by(id=user_id))
+
+
+@account.route('/logout/')
+def logout():
+    del session['user_id']
+    flash('logout success')
+    return redirect(url_for('.login'))
