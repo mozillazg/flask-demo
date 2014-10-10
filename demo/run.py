@@ -5,8 +5,6 @@
 # sys.path.insert(0, '../')
 
 from flask import Flask
-
-from apps.account.views import account
 from database import db
 
 
@@ -23,7 +21,11 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
+
+    from demo.apps.account.views import account
     app.register_blueprint(account)
+    from demo.apps.blog.views import blog
+    app.register_blueprint(blog)
 
     return app
 

@@ -12,6 +12,9 @@ class User(db.Model):
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, unique=True, nullable=False)
 
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
+
     def __init__(self, username, password):
         self.username = username
         self.password = password

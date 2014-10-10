@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="post">
+  <h1>{{ post.title }}</h1>
+  <p>By {{ post.author.username }}</p>
+  <p>{{ post.content }}</p>
+</div>
+
+<hr />
+
+<div class="comments">
+  {% for comment in comments %}
+  <div class="comment" style="border-bottom: 1px solid #aaa">
+    <ul>
+      <li>author: {{ comment.author }}</li>
+      <li>content: {{ comment.content }}</li>
+    </ul>
+  </div>
+  {% endfor %}
+
+
+  <div class="new_comment">
+    <form action="{{ url_for('blog.new_comment', post_id=post.id) }}" method="post">
+      <p>comment: <textarea name="content" id=content rows="8" cols="40"></textarea></p>
+      <input type="hidden" name="next" id="next" value="{{ request.path }}" />
+      <input type="submit" name="" id="" value="new comment" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+

@@ -6,8 +6,18 @@
     <title>{% block title %}Flask Demo{% endblock %}</title>
     <style type="text/css" media="all">
       body {
-        margin: 10px auto;
+        margin: 50px auto;
         width: 960px;
+      }
+      .main {
+        clear: both;
+        padding-top: 20px;
+      }
+      .nav {
+        float: left;
+      }
+      .account {
+        float: right;
       }
     </style>
   </head>
@@ -27,8 +37,25 @@
     </div>
 
     <div class="content">
+      <div class="nav">
+        <a href="{{ url_for('account.index') }}">Account</a>
+        <a href="{{ url_for('blog.index') }}">Blog</a>
+      </div>
+
+      <div class="account">
+      {% if g.user %}
+        <a href="{{ url_for('account.index') }}">{{ g.user.username }}</a>
+        <a href="{{ url_for('account.logout') }}">logout</a>
+      {% else %}
+        <a href="{{ url_for('account.register') }}">register</a>
+        <a href="{{ url_for('account.login') }}">login</a>
+      {% endif %}
+      </div>
+
+    <div class="main">
     {% block content %}
     {% endblock %}
+    </div>
     </div>
   </body>
 </html>

@@ -29,7 +29,7 @@ class Post(db.Model):
         self.user_id = user_id
         self.slug = slug or pinyin_slug(self.title.replace(' ', ''))
 
-    def _repr_(self):
+    def __repr__(self):
         return '<Post %r>' % (self.title)
 
 
