@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # import sys
+import os
 
 # sys.path.insert(0, '../')
 
@@ -16,6 +17,8 @@ def create_app(config=None):
     app.config.from_pyfile('config.py')
     if isinstance(config, dict):
         app.config.update(config)
+    elif config:
+        app.config.from_pyfile(os.path.realpath(config))
     app.static_folder = app.config.get('STATIC_FOLDER')
 
     db.init_app(app)
