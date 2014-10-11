@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask_script import Manager, Server
+from flask.ext.script import Manager, Server
 
 from demo.app import create_app
 
