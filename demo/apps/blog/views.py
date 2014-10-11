@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from flask import (Blueprint, flash, render_template, redirect,
-                   request, url_for, session, g)
+                   request, url_for, g)
 from demo.apps.account.decorators import login_required
 from demo.apps.blog.models import Post, Comment
-from demo.apps.account.models import User
-from demo.database import db
+from demo.apps.account.auth import current_user
+from demo.extensions import db
 
 blog = Blueprint('blog', __name__, url_prefix='/blog',
                  template_folder='templates')
@@ -14,9 +14,10 @@ blog = Blueprint('blog', __name__, url_prefix='/blog',
 
 @blog.before_request
 def before_request():
-    g.user = None
-    if 'user_id' in session:
-        g.user = User.query.get(session['user_id'])
+    if current_user.is_authenticated():
+        g.user = current_user
+    else:
+        g.user = None
 
 
 @blog.route('/')

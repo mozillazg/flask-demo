@@ -6,7 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
-from database import db
+from extensions import db, login_manager
 
 
 def create_app(config=None):
@@ -24,12 +24,23 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
+    register_login(app)
+
     from demo.apps.account.views import account
     app.register_blueprint(account)
     from demo.apps.blog.views import blog
     app.register_blueprint(blog)
 
     return app
+
+
+def register_login(app):
+    login_manager.login_view = 'account.login'
+    login_manager.init_app(app)
+    from apps.account.auth import load_user
+    login_manager.user_loader(load_user)
+    # from apps.account.auth import load_user_from_request
+    # login_manager.request_loader(load_user_from_request)
 
 
 def create_db():

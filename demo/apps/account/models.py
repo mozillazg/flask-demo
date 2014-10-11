@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from demo.database import db
+from demo.extensions import db
 
 
 class User(db.Model):
