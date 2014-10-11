@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from sqlalchemy.orm import validates
-
 from pypinyin import slug as pinyin_slug
 from demo.database import db
 
@@ -30,18 +28,6 @@ class Post(db.Model):
         self.content = content
         self.user_id = user_id
         self.slug = slug or pinyin_slug(self.title.replace(' ', ''))
-
-    @validates('slug')
-    def validate_slug(self, field, value):
-        if not value:
-            value = pinyin_slug(self.title.replace(' ', ''))
-        if self.id:
-            is_exists = Post.query.filter(id != self.id, Post.slug == value).first()
-        else:
-            is_exists = Post.query.filter_by(slug=value).first()
-        assert is_exists, 'already exists this slug'
-
-        return value
 
     def __repr__(self):
         return '<Post %r>' % (self.title)
