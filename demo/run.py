@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# import sys
+import sys
+import os
 
-# sys.path.insert(0, '../')
+current_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, os.path.join(current_dir, '../'))
 
 from flask import Flask
 from database import db
@@ -21,7 +23,6 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
-
     from demo.apps.account.views import account
     app.register_blueprint(account)
     from demo.apps.blog.views import blog
@@ -31,8 +32,6 @@ def create_app(config=None):
 
 
 def create_db():
-    from apps.account.models import User
-    from apps.blog.models import Post, Comment
     db.create_all()
 
 app = create_app()

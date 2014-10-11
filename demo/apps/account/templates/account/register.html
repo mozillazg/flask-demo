@@ -6,8 +6,9 @@
 
 {% block content %}
 <form action="" method="post">
-  username: <input type="text" name="username" id="username" value="" />
-  password: <input type="password" name="password" id="password" value="" />
+  {{ form.hidden_tag() }}
+  {{ form.username.label }} {{ form.username(size=20) }}
+  {{ form.password.label }} {{ form.password(size=20) }}
   <input type="submit" name="" id="" value="register" />
 </form>
 

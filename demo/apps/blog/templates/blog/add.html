@@ -3,10 +3,11 @@
 
 {% block content %}
 <form action="" method="post">
-  <input type="hidden" name="post_id" id="post_id" value="{{ data.id }}" />
-  <p>title: <input type="text" name="title" id="title" value="{{ data.title }}" /></p>
-  <p>slug: <input type="text" name="slug" id="slug" value="{{ data.slug }}" /></p>
-  <p>content: <textarea name="content" id=content rows="8" cols="40">{{ data.content }}</textarea></p>
+  {{ form.hidden_tag() }}
+  <p>{{ form.title.label }} {{ form.title(size=20) }}</p>
+  <p>{{ form.slug.label }} {{ form.slug(size=20) }}</p>
+  <p>{{ form.content.label }} {{ form.content(size=20) }}</p>
+
   {% if data %}
   <p><input type="submit" value="update post"> </p>
   {% else %}

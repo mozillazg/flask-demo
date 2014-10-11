@@ -5,6 +5,7 @@ from flask import (Blueprint, flash, render_template, redirect,
                    request, url_for, session, g)
 from demo.apps.account.decorators import login_required
 from demo.apps.blog.models import Post, Comment
+from demo.apps.blog.forms import PostForm, CommentForm
 from demo.apps.account.models import User
 from demo.database import db
 
@@ -23,16 +24,19 @@ def before_request():
 @login_required
 def index():
     # data = Post.query.order_by(db.desc(Post.updated_at)).all()
-    data = Post.query.order_by(db.desc(Post.created_at)).all()
+    data = Post.query.order_by(Post.created_at.desc()).all()
     return render_template('blog/index.html', data=data)
 
 
 @blog.route('/new/', methods=['GET', 'POST'])
 def new():
-    if request.method == 'POST':
-        title = request.form['title']
-        slug = request.form['slug']
-        content = request.form['content']
+    form = PostForm()
+
+    if form.validate_on_submit():
+        title = form.title.data
+        slug = form.title.data
+        content = form.content.data
+
         user_id = g.user.id
         post = Post(title, content, user_id, slug)
         db.session.add(post)
@@ -40,7 +44,7 @@ def new():
 
         flash('add success')
         return redirect(url_for('.index'))
-    return render_template('blog/add.html', data=None)
+    return render_template('blog/add.html', data=None, form=form)
 
 
 @blog.route('/delete/', methods=['POST'])
@@ -55,11 +59,12 @@ def delete():
 @blog.route('/edit/<int:post_id>/<slug>/', methods=['GET', 'POST'])
 def edit(post_id, slug):
     post = Post.query.get(post_id)
-    if request.method == 'POST':
-        post_id = request.form['post_id']
-        title = request.form['title']
-        slug = request.form['slug']
-        content = request.form['content']
+    form = PostForm(request.form, post)
+
+    if form.validate_on_submit():
+        title = form.title.data
+        slug = form.slug.data
+        content = form.content.data
         user_id = g.user.id
 
         post.title = title
@@ -72,7 +77,7 @@ def edit(post_id, slug):
 
         flash('edit success')
         return redirect(url_for('.index'))
-    return render_template('blog/add.html', data=post)
+    return render_template('blog/add.html', data=post, form=form)
 
 
 @blog.route('/view/<int:post_id>/<slug>/')
