@@ -21,7 +21,6 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
-
     from demo.apps.account.views import account
     app.register_blueprint(account)
     from demo.apps.blog.views import blog
@@ -31,11 +30,9 @@ def create_app(config=None):
 
 
 def create_db():
-    from apps.account.models import User
-    from apps.blog.models import Post, Comment
     db.create_all()
 
-app = create_app()
 
 if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True, host='0.0.0.0')
