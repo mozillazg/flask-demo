@@ -6,7 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
-from database import db
+from extensions import db
 
 
 def create_app(config=None):

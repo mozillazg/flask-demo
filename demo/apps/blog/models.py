@@ -3,7 +3,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from pypinyin import slug as pinyin_slug
-from demo.database import db
+from demo.extensions import db
 
 
 class Post(db.Model):

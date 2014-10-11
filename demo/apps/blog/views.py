@@ -6,7 +6,7 @@ from flask import (Blueprint, flash, render_template, redirect,
 from demo.apps.account.decorators import login_required
 from demo.apps.blog.models import Post, Comment
 from demo.apps.account.models import User
-from demo.database import db
+from demo.extensions import db
 
 blog = Blueprint('blog', __name__, url_prefix='/blog',
                  template_folder='templates')
