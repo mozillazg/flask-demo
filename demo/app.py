@@ -6,7 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
-from database import db
+from database import cache, db
 
 
 def create_app(config=None):
@@ -23,6 +23,7 @@ def create_app(config=None):
 
     db.init_app(app)
     db.app = app
+    cache.init_app(app)
 
     from demo.apps.account.views import account
     app.register_blueprint(account)
