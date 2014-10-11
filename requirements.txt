@@ -1,7 +1,5 @@
 Flask
 Flask-SQLAlchemy
 Flask-Script
-Flask-Admin
-
 jieba
 pypinyin

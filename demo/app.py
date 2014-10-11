@@ -6,7 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
-from database import admin, db
+from database import db
 
 
 def create_app(config=None):
@@ -24,27 +24,12 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
-    register_admins(app)
-
     from demo.apps.account.views import account
-    from demo.apps.blog.views import blog
     app.register_blueprint(account)
+    from demo.apps.blog.views import blog
     app.register_blueprint(blog)
 
     return app
-
-
-def register_admins(app):
-    from demo.apps.account.models import User
-    from demo.apps.blog.models import Post
-    from demo.apps.blog.models import Comment
-    from demo.apps.account.admin import UserAdmin
-    from demo.apps.blog.admin import PostAdmin, CommentAdmin
-
-    admin.add_view(UserAdmin(User))
-    admin.add_view(PostAdmin(Post))
-    admin.add_view(CommentAdmin(Comment))
-    admin.init_app(app)
 
 
 def create_db():

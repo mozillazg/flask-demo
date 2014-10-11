@@ -15,7 +15,7 @@ class User(db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
-    def __init__(self, username='', password=''):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
 
