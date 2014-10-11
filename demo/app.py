@@ -6,6 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
+from flask.ext.mail import Mail
 from database import db
 
 
@@ -23,6 +24,7 @@ def create_app(config=None):
 
     db.init_app(app)
     db.app = app
+    Mail(app)
 
     from demo.apps.account.views import account
     app.register_blueprint(account)
