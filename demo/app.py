@@ -30,6 +30,8 @@ def create_app(config=None):
     app.register_blueprint(blog)
     from demo.apps.api.v1 import bp, API_VERSION
     app.register_blueprint(bp, url_prefix='%s/v%s' % ('/api', API_VERSION))
+    from demo.apps.api import bp
+    app.register_blueprint(bp, url_prefix='%s' % '/api')
 
     return app
 
