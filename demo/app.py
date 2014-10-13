@@ -28,6 +28,8 @@ def create_app(config=None):
     app.register_blueprint(account)
     from demo.apps.blog.views import blog
     app.register_blueprint(blog)
+    from demo.apps.api.v1 import bp, API_VERSION
+    app.register_blueprint(bp, url_prefix='%s/v%s' % ('/api', API_VERSION))
 
     return app
 

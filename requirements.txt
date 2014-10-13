@@ -1,7 +1,7 @@
 Flask
 Flask-SQLAlchemy
 Flask-Script
-flask-restful
+Flask-RESTful
 
 jieba
 pypinyin
