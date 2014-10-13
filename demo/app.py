@@ -6,6 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
+from flask.ext.migrate import Migrate
 from extensions import db
 
 
@@ -23,6 +24,8 @@ def create_app(config=None):
 
     db.init_app(app)
     db.app = app
+    migrate = Migrate()
+    migrate.init_app(app, db)
 
     from demo.apps.account.views import account
     app.register_blueprint(account)
