@@ -4,3 +4,4 @@ Flask-Script
 jieba
 pypinyin
 pytest
+pytest-cov
