@@ -16,7 +16,7 @@ api = Api(bp, catch_all_404s=True)
 def token_required(func):
     @wraps(func)
     def _wrapper(*args, **kwargs):
-        token = request.values.get('token')
+        token = request.values.get('token') or request.authorization.username
         if not (token and Client.verify_auth_token(token)):
             return abort(403, message='token is invalid or expired')
         return func(*args, **kwargs)
