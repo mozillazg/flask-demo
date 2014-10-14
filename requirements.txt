@@ -2,6 +2,7 @@ Flask
 Flask-SQLAlchemy
 Flask-Script
 Flask-RESTful
+itsdangerous
 
 jieba
 pypinyin

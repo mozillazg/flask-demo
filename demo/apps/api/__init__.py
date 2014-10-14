@@ -7,6 +7,8 @@ from functools import wraps
 from flask import request, Blueprint
 from flask.ext.restful import abort, Api, Resource, reqparse
 
+from .models import Client
+
 bp = Blueprint('api', __name__)
 api = Api(bp, catch_all_404s=True)
 
@@ -14,19 +16,9 @@ api = Api(bp, catch_all_404s=True)
 def token_required(func):
     @wraps(func)
     def _wrapper(*args, **kwargs):
-        token = request.args.get('token')
-        if not token:
-            return abort(401)
-        return func(*args, **kwargs)
-    return _wrapper
-
-
-def token_required(func):
-    @wraps(func)
-    def _wrapper(*args, **kwargs):
-        token = request.args.get('token')
-        if not token:
-            return abort(401)
+        token = request.values.get('token')
+        if not (token and Client.verify_auth_token(token)):
+            return abort(403, message='token is invalid or expired')
         return func(*args, **kwargs)
     return _wrapper
 
@@ -41,11 +33,21 @@ class TokenAPI(Resource):
                                    help='client_secret is required', location='json')
         super(TokenAPI, self).__init__()
 
+    def get(self):
+        return self.post()
+
     def post(self):
         args = self.reqparse.parse_args()
-        return {
-            'token': 'token',
-            'expires_in': 3600,
-        }
+        client_id = args['client_id']
+        client_secret = args['client_secret']
+        client = Client.query.filter_by(api_key=client_id,
+                                        secret_key=client_secret).first()
+        if not client:
+            abort(403, message='client_id and/or client_secret is invalid')
+        else:
+            return {
+                'token': client.generate_auth_token(3600),
+                'expires_in': 3600,
+            }
 
 api.add_resource(TokenAPI, '/token')
