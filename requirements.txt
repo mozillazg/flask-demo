@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 Flask-Script
 jieba
 pypinyin
+pytest
