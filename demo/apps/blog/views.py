@@ -6,10 +6,16 @@ from flask import (Blueprint, flash, render_template, redirect,
 from demo.apps.account.decorators import login_required
 from demo.apps.blog.models import Post, Comment
 from demo.apps.account.models import User
-from demo.extensions import db
+from demo.extensions import cache, db
 
 blog = Blueprint('blog', __name__, url_prefix='/blog',
                  template_folder='templates')
+
+
+@cache.memoize(timeout=50)   # cache normal function
+def func_foobar(a, b):
+    import time
+    return a + b + time.time()
 
 
 @blog.before_request
@@ -21,6 +27,7 @@ def before_request():
 
 @blog.route('/')
 @login_required
+@cache.cached(timeout=60 * 1, key_prefix='all_posts')  # cache view function
 def index():
     # data = Post.query.order_by(db.desc(Post.updated_at)).all()
     data = Post.query.order_by(db.desc(Post.created_at)).all()

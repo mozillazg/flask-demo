@@ -1,6 +1,8 @@
 Flask
 Flask-SQLAlchemy
 Flask-Script
+Flask-Cache
+
 jieba
 pypinyin
 pytest
