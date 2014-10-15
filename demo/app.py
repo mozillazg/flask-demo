@@ -6,6 +6,7 @@ import os
 # sys.path.insert(0, '../')
 
 from flask import Flask
+from flask.ext.mail import Mail
 from extensions import admin, cache, db
 
 
@@ -24,8 +25,8 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
     cache.init_app(app)
-
     register_admins(app)
+    Mail(app)
 
     from demo.apps.account.views import account
     from demo.apps.blog.views import blog

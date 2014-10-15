@@ -3,6 +3,7 @@ Flask-SQLAlchemy
 Flask-Script
 Flask-Cache
 Flask-Admin
+Flask-Mail
 
 jieba
 pypinyin
