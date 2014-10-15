@@ -11,7 +11,7 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
-    content = db.Column(db.String)
+    content = db.Column(db.Text)
     slug = db.Column(db.String(200), unique=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('account_user.id'))
@@ -23,7 +23,7 @@ class Post(db.Model):
     updated_at = db.Column(db.DateTime, default=db.func.now(),
                            onupdate=db.func.now())
 
-    def __init__(self, title, content, user_id, slug=None):
+    def __init__(self, title='', content='', user_id='', slug=None):
         self.title = title
         self.content = content
         self.user_id = user_id
@@ -49,7 +49,7 @@ class Comment(db.Model):
     def __repr__(self):
         return '<Comment %r>' % (self.content[:20])
 
-    def __init__(self, post_id, user_id, content):
+    def __init__(self, post_id='', user_id='', content=''):
         self.post_id = post_id
         self.user_id = user_id
         self.content = content
