@@ -1,9 +1,13 @@
 Flask
 Flask-SQLAlchemy
 Flask-Script
+<<<<<<< HEAD
 Flask-Cache
 Flask-Admin
 Flask-Mail
+=======
+Flask-Migrate
+>>>>>>> Flask-Migrate
 
 jieba
 pypinyin

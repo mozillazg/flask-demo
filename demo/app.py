@@ -7,6 +7,7 @@ import os
 
 from flask import Flask
 from flask.ext.mail import Mail
+from flask.ext.migrate import Migrate
 from extensions import admin, cache, db
 
 
@@ -27,6 +28,8 @@ def create_app(config=None):
     cache.init_app(app)
     register_admins(app)
     Mail(app)
+    migrate = Migrate()
+    migrate.init_app(app, db)
 
     from demo.apps.account.views import account
     from demo.apps.blog.views import blog
