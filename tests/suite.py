@@ -28,7 +28,8 @@ class BaseSuite(object):
 
     def prepare_login(self, username='foo', password='foo'):
         self.prepare_account()
-        self.client.post('/accounts/login/', data={
+        rv = self.client.post('/accounts/login/', data={
             'username': username,
             'password': password
         }, follow_redirects=True)
+        assert 'login success' in rv.data

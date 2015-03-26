@@ -6,6 +6,7 @@
 
 {% block content %}
 <form action="" method="post">
+  {{ form.errors }}
   {{ form.hidden_tag() }}
   {{ form.username.label }} {{ form.username(size=20) }}
   {{ form.password.label }} {{ form.password(size=20) }}

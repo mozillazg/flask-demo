@@ -26,12 +26,14 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
     cache.init_app(app)
-    register_admins(app)
     Mail(app)
     migrate = Migrate()
     migrate.init_app(app, db)
 
     register_login(app)
+
+    if not app.config.get('TESTING'):
+        register_admins(app)
 
     from demo.apps.account.views import account
     from demo.apps.blog.views import blog

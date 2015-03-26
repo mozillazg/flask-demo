@@ -13,7 +13,8 @@ from demo.extensions import db
 class Client(object):
     def __init__(self):
         config = {'TESTING': True,
-                  'WTF_CSRF_ENABLE': False,
+                  'WTF_CSRF_ENABLED': False,
+                  'WTF_CSRF_CHECK_DEFAULT': False,
                   'SECRET_KEY': 'secret-key-for-test',
                   }
         self.db_fd, self.db_file = tempfile.mkstemp()

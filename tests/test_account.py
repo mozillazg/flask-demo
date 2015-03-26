@@ -7,9 +7,8 @@ from .suite import BaseSuite
 
 class TestLogin(BaseSuite):
     def test_login_required(self):
-        rv = self.client.get('/accounts/')
-        assert 'login' in rv.location
-        assert 'next' in rv.location
+        rv = self.client.get('/accounts/', follow_redirects=True)
+        assert 'login' in rv.data
 
     def test_get(self):
         rv = self.client.get('/accounts/login/')
@@ -21,7 +20,8 @@ class TestLogin(BaseSuite):
             data={'username': 'foo', 'password': 'bar'},
             follow_redirects=True
         )
-        assert 'username or password error' in rv.data
+        assert '<form' in rv.data
+        assert 'login' in rv.data
 
     def test_password_error(self):
         rv = self.client.post(
@@ -29,15 +29,16 @@ class TestLogin(BaseSuite):
             data={'username': 'foo', 'password': 'barrr'},
             follow_redirects=True
         )
-        assert 'username or password error' in rv.data
+        assert '<form' in rv.data
+        assert 'login' in rv.data
 
     def test_login_success(self):
         self.prepare_account()
-        rv = self.client.post(
-            '/accounts/login/',
-            data={'username': 'foo', 'password': 'foo'},
-        )
-        assert rv.location.endswith('/accounts/')
+        rv = self.client.post('/accounts/login/', data={
+            'username': 'foo',
+            'password': 'foo'
+        }, follow_redirects=True)
+        assert 'login success' in rv.data
 
     def test_index(self):
         self.prepare_login()
