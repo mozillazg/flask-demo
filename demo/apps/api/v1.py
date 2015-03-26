@@ -7,11 +7,12 @@ from flask.ext.restful import abort, Api, reqparse, Resource
 
 from demo.apps.todo.models import Task
 from demo.extensions import db
+from . import token_required
 
 API_VERSION_V1 = 1
 API_VERSION = API_VERSION_V1
 bp = Blueprint('api_v1', __name__)
-api_v1 = Api(bp)
+api_v1 = Api(bp, catch_all_404s=True)
 
 
 class TaskListAPI(Resource):
@@ -24,16 +25,14 @@ class TaskListAPI(Resource):
                                    default='', location='json')
         super(TaskListAPI, self).__init__()
 
+    @token_required
     def get(self):
         tasks = Task.query.all()
         data = [{'id': t.id, 'title': t.title, 'description': t.description}
                 for t in tasks]
-        return {
-            'data': data,
-            'status': 0,
-            'message': 'OK',
-        }
+        return data
 
+    @token_required
     def post(self):
         args = self.reqparse.parse_args()
         task = Task()
@@ -47,11 +46,7 @@ class TaskListAPI(Resource):
             'title': task.title,
             'description': task.description,
         }
-        return {
-            'data': data,
-            'status': 0,
-            'message': 'OK',
-        }, 201
+        return data, 201
 
 
 class TaskAPI(Resource):
@@ -64,26 +59,24 @@ class TaskAPI(Resource):
                                    default='', location='json')
         super(TaskAPI, self).__init__()
 
+    @token_required
     def get(self, id):
         task = Task.query.filter_by(id=id).first()
         if not task:
-            abort(404, message="Task %s doesn't exist" % id, status=404)
+            abort(404, message="Task %s doesn't exist" % id)
 
         data = {
             'id': task.id,
             'title': task.title,
             'description': task.description,
         }
-        return {
-            'data': data,
-            'status': 0,
-            'message': 'OK',
-        }
+        return data
 
+    @token_required
     def put(self, id):
         task = Task.query.filter_by(id=id).first()
         if not task:
-            abort(404, message="Task %s doesn't exist" % id, status=404)
+            abort(404, message="Task %s doesn't exist" % id)
         args = self.reqparse.parse_args()
         task.title = args['title']
         task.description = args['description']
@@ -95,24 +88,17 @@ class TaskAPI(Resource):
             'title': task.title,
             'description': task.description,
         }
-        return {
-            'data': data,
-            'status': 0,
-            'message': 'OK',
-        }
+        return data
 
+    @token_required
     def delete(self, id):
         task = Task.query.filter_by(id=id).first()
         if not task:
-            abort(404, message="Task %s doesn't exist" % id, status=404)
+            abort(404, message="Task %s doesn't exist" % id)
         db.session.delete(task)
         db.session.commit()
 
-        return {
-            'data': {},
-            'status': 0,
-            'message': 'OK',
-        }
+        # return {}
 
 
 api_v1.add_resource(TaskListAPI, '/tasks')
