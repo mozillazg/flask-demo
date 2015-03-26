@@ -7,6 +7,7 @@ Flask-Mail
 Flask-Migrate
 Flask-Login
 Flask-WTF
+Flask-RESTful
 
 jieba
 pypinyin
