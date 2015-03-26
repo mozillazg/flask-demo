@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import (Blueprint, flash, render_template, redirect,
-                   request, url_for, session, g)
+                   request, url_for, g)
 from demo.apps.account.decorators import login_required
 from demo.apps.blog.models import Post, Comment
-from demo.apps.account.models import User
+from demo.apps.account.auth import current_user
 from demo.extensions import cache, db
 
 blog = Blueprint('blog', __name__, url_prefix='/blog',
@@ -20,9 +20,10 @@ def func_foobar(a, b):
 
 @blog.before_request
 def before_request():
-    g.user = None
-    if 'user_id' in session:
-        g.user = User.query.get(session['user_id'])
+    if current_user.is_authenticated():
+        g.user = current_user
+    else:
+        g.user = None
 
 
 @blog.route('/')

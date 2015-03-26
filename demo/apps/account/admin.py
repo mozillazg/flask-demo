@@ -4,7 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from flask.ext.admin.contrib.sqla import ModelView
 
-from demo.database import db
+from demo.extensions import db
 
 
 class UserAdmin(ModelView):

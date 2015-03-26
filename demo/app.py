@@ -8,7 +8,7 @@ import os
 from flask import Flask
 from flask.ext.mail import Mail
 from flask.ext.migrate import Migrate
-from extensions import admin, cache, db
+from extensions import admin, cache, db, login_manager
 
 
 def create_app(config=None):
@@ -31,6 +31,8 @@ def create_app(config=None):
     migrate = Migrate()
     migrate.init_app(app, db)
 
+    register_login(app)
+
     from demo.apps.account.views import account
     from demo.apps.blog.views import blog
     app.register_blueprint(account)
@@ -50,6 +52,15 @@ def register_admins(app):
     admin.add_view(PostAdmin(Post))
     admin.add_view(CommentAdmin(Comment))
     admin.init_app(app)
+
+
+def register_login(app):
+    login_manager.login_view = 'account.login'
+    login_manager.init_app(app)
+    from apps.account.auth import load_user
+    login_manager.user_loader(load_user)
+    # from apps.account.auth import load_user_from_request
+    # login_manager.request_loader(load_user_from_request)
 
 
 def create_db():
