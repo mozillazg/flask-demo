@@ -5,6 +5,7 @@ from flask import (Blueprint, flash, render_template, redirect,
                    request, url_for, session, g)
 from .auth import current_user, login_user, logout_user
 from .decorators import login_required
+from .forms import SubmitForm
 from .models import User
 
 account = Blueprint('account', __name__,
@@ -23,46 +24,41 @@ def before_request():
 @account.route('/register/', methods=['GET', 'POST'])
 def register():
     message = None
-    if request.method == 'POST':
-        username = request.form.get('username', '').lower()
-        password = request.form.get('password', '').lower()
+    form = SubmitForm()
+    if form.validate_on_submit():
+        username = form.username.data.strip()
+        password = form.password.data.strip()
 
-        if not all([username, password]):
-            message = 'all input is required'
-        elif User.query.filter_by(username=username).first():
-            message = 'username %s has been registered' % username
-        else:
-            User.create_user(username, password)
-            message = 'register success'
-            flash(message)
-            return redirect(url_for('.login'))
+        User.create_user(username, password)
+        message = 'register success'
+        flash(message)
+        return redirect(url_for('.login'))
     if message:
         flash(message)
-    return render_template('account/register.html')
+    return render_template('account/register.html', form=form)
 
 
 @account.route('/login/', methods=['GET', 'POST'])
 def login():
     message = None
-    if request.method == 'POST':
-        username = request.form.get('username', '').lower()
-        password = request.form.get('password', '').lower()
+    form = SubmitForm()
+    if form.validate_on_submit():
+        username = form.username.data.strip()
+        password = form.password.data.strip()
 
-        if not all([username, password]):
-            message = 'all input is required'
-        else:
-            user = User.login(username, password)
-            if user:
-                message = 'login success'
-                login_user(user)
-            else:
-                message = 'username or password error'
+        user = User.login(username, password)
+        if user:
+            message = 'login success'
+            session['user_id'] = user.get_id()
+            login_user(user)
             flash(message)
             next_url = request.args.get('next', url_for('.index'))
             return redirect(next_url)
+        else:
+            message = 'username or password error'
     if message:
         flash(message)
-    return render_template('account/login.html')
+    return render_template('account/login.html', form=form)
 
 
 @account.route('/')

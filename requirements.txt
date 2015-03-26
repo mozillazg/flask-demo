@@ -6,6 +6,7 @@ Flask-Admin
 Flask-Mail
 Flask-Migrate
 Flask-Login
+Flask-WTF
 
 jieba
 pypinyin

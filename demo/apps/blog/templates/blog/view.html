@@ -23,6 +23,7 @@
 
   <div class="new_comment">
     <form action="{{ url_for('blog.new_comment', post_id=post.id) }}" method="post">
+      {{ form.csrf_token }}
       <p>comment: <textarea name="content" id=content rows="8" cols="40"></textarea></p>
       <input type="hidden" name="next" id="next" value="{{ request.path }}" />
       <input type="submit" name="" id="" value="new comment" />
